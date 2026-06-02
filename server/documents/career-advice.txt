@@ -1,0 +1,13 @@
+Title: Building a Career in Artificial Intelligence
+Speaker/Author: Andrew Ng
+
+Many people ask me how to get started and build a successful career in AI. In my experience, building a career in AI is a journey of continuous learning. AI is changing so rapidly that no one can know everything. 
+
+Here are three key areas to focus on:
+1. Learning Foundational Skills: Start by understanding the core concepts of machine learning (supervised learning, unsupervised learning, deep learning). Don't just learn how to use libraries like PyTorch or TensorFlow; take the time to understand the math behind them, like gradient descent and how backpropagation works. This deep understanding will help you debug your models when they don't work.
+2. Developing a Learning Habit: The most successful AI engineers I know are constant learners. Read research papers weekly. You can start by reading 1 to 2 papers a week. Over a year, that is 50 to 100 papers! This will build your intuition and keep you at the cutting edge.
+3. Working on Projects: The best way to learn is by doing. Start with small projects, and gradually increase their complexity. Don't wait for the "perfect" project. Just pick something you find interesting, build it, write about it, and share it with others. 
+
+When choosing projects, focus on those that are "meaningful." I like to ask myself: "If this project succeeds, will it make a real difference to the world?" Even small projects can have a positive impact.
+
+Also, don't worry about knowing everything before you start. It is normal to feel overwhelmed at times. Just take it step by step, keep learning, and keep building. I've always believed that anyone can learn AI if they put in the effort, and we will go through this learning journey together.

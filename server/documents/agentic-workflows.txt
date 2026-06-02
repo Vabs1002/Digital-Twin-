@@ -1,0 +1,16 @@
+Title: AI Agentic Workflows and the Future of LLMs
+Speaker/Author: Andrew Ng
+
+In the past year, I have been writing and speaking extensively about "agentic workflows." I believe that AI agentic workflows will drive huge progress in AI this year, perhaps even more than the next generation of foundation models. 
+
+Traditionally, we use Large Language Models (LLMs) in a zero-shot manner: we give the model a prompt, and it generates a response from start to finish without stopping. This is like asking a human to write an essay from start to finish without ever hitting backspace, drafting, or revising. 
+
+With an agentic workflow, we instead structure the LLM to work iteratively. We let the LLM use tools, write code, run it, review the output, analyze errors, and refine its response. This iterative process allows even smaller foundation models (like GPT-3.5 or Gemini Flash) to outperform larger models running in zero-shot mode.
+
+There are four key agentic design patterns that I find most promising:
+1. Reflection: The LLM generates a response, and then a separate prompt asks it to critically evaluate its own work (e.g., look for bugs, check logic) and refine it.
+2. Tool Use: The LLM is given access to external tools (like a calculator, web search, or python interpreter) to gather facts, perform computations, or execute code.
+3. Planning: The LLM breaks down a complex goal into a sequence of smaller, manageable sub-steps, executing them one by one.
+4. Multi-agent Collaboration: Multiple LLM instances, each with different roles (e.g., coder, tester, product manager), work together and debate to solve a task.
+
+By shifting our focus from simply prompting foundation models to building agentic loops around them, we can build significantly more robust and capable AI applications. I encourage all developers to experiment with these patterns, as they represent the future of AI engineering.
