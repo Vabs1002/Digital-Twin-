@@ -1,12 +1,12 @@
 # Andrew Ng Digital Twin: An Interactive AI Teacher with Dual Memory & Streaming Neural Voice
 
-I built this project to create an interactive Digital Twin of the world-renowned AI professor and educator **Andrew Ng**. My goal was to design a highly responsive classroom companion that captures Andrew’s signature encouraging, calm, and structured teaching style, while ensuring zero-latency speech feedback and persistent memory of student profiles.
+I built this project to create an interactive Digital Twin of the world renowned AI professor and educator **Andrew Ng**. My goal was to design a highly responsive classroom companion that captures Andrew’s signature encouraging, calm, and structured teaching style, while ensuring zero latency speech feedback and persistent memory of student profiles.
 
 I structured this repository as a full-stack JavaScript application, with an Express backend serving a custom RAG engine and Microsoft Edge Neural Voice, paired with a glassmorphic dashboard built in Vite + React.
 
 ---
 
-## 🌟 What I Built (Core Features)
+##  What I Built (Core Features)
 
 1.  **Pedagogical Persona**: I instructed Gemini 2.5 Flash to act strictly as Andrew Ng. He explains machine learning concepts using analogies and intuitive mappings before introducing mathematical formulas. I also updated his prompt to restrict raw LaTeX symbols (e.g. speaking "theta transpose x" instead of `$\theta^T x$`) and raw code blocks, ensuring that the spoken text matches the written text perfectly without reading command-line brackets or variables.
 2.  **Fuzzy-Search RAG Engine**: To ground Andrew's responses in his actual CS229 Stanford course material, I built a local fuzzy search engine using **Fuse.js**. I chunked five lecture syllabus files (Linear Regression, Neural Networks, Bias/Variance, Career Advice, and Agentic Workflows). When you submit a question, my server automatically fetches the most relevant lecture passages and injects them as grounding context.
@@ -28,7 +28,7 @@ I cleaned up the project root to ensure it is neat and organized:
 
 ---
 
-## 🚀 Setup & Installation
+##  Setup & Installation
 
 Follow these steps to run the project locally on your machine:
 
