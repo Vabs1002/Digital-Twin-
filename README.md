@@ -23,7 +23,7 @@ I structured this repository as a full-stack JavaScript application, with an Exp
 
 I cleaned up the project root to ensure it is neat and organized:
 *   `client/`: My Vite + React + TypeScript frontend codebase. All layouts are defined in `src/index.css` using custom glassmorphic properties.
-*   `server/`: My Express + Node.js backend. Contains the RAG files, documents, and system configuration.
+*   `python-server/`: My FastAPI + Python backend. Contains the RAG files, documents, and system configurations.
 *   `zero-to-hero/`: I created this folder for other developers who want to study my code from scratch. It contains a detailed [theory.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/theory.md) explaining my architectural choices, a step-by-step [build_from_scratch.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/build_from_scratch.md) tutorial, and a beginner-friendly [diff_guide.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/diff_guide.md) showing how to make and apply code modifications yourself, alongside developer test scripts.
 
 ---
@@ -33,21 +33,17 @@ I cleaned up the project root to ensure it is neat and organized:
 Follow these steps to run the project locally on your machine:
 
 ### Prerequisites
-*   Node.js (v18 or higher)
-*   Python 3 (needed for Edge TTS integration)
-*   `edge-tts` python package. You can install it by running:
-    ```bash
-    pip install edge-tts
-    ```
+*   Node.js (v18 or higher) for the React frontend
+*   Python 3.8 or higher for the FastAPI backend
 
-### 1. Configure the Backend Server
-1.  Navigate to the server directory:
+### 1. Configure the Python Backend Server
+1.  Navigate to the Python server directory:
     ```bash
-    cd server
+    cd python-server
     ```
-2.  Install dependencies:
+2.  Install required dependencies:
     ```bash
-    npm install
+    pip install -r requirements.txt
     ```
 3.  Duplicate the example environment file:
     ```bash
@@ -56,13 +52,12 @@ Follow these steps to run the project locally on your machine:
 4.  Open `.env` and fill in your Gemini API key (retrieve a free key in 30 seconds at [Google AI Studio](https://aistudio.google.com/)):
     ```env
     GEMINI_API_KEY=your_actual_key_here
-    PORT=5000
     ```
 5.  Start the server:
     ```bash
-    npm run start
+    python server.py
     ```
-    *The server will start at `http://localhost:5000`.*
+    *The backend server will start at `http://localhost:5000`.*
 
 ### 2. Configure the Client
 1.  Open a new terminal window and navigate to the client directory:
