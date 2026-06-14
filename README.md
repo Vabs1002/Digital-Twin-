@@ -24,7 +24,7 @@ I structured this repository as a full-stack JavaScript application, with an Exp
 I cleaned up the project root to ensure it is neat and organized:
 *   `client/`: My Vite + React + TypeScript frontend codebase. All layouts are defined in `src/index.css` using custom glassmorphic properties.
 *   `server/`: My Express + Node.js backend. Contains the RAG files, documents, and system configuration.
-*   `zero-to-hero/`: I created this folder for other developers who want to study my code from scratch. It contains a detailed [theory.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/theory.md) explaining my architectural choices, alongside the developer test scripts I used during building.
+*   `zero-to-hero/`: I created this folder for other developers who want to study my code from scratch. It contains a detailed [theory.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/theory.md) explaining my architectural choices, a step-by-step [build_from_scratch.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/build_from_scratch.md) tutorial, and a beginner-friendly [diff_guide.md](file:///c:/Users/vabsd/Desktop/AIMSUMMER1/zero-to-hero/diff_guide.md) showing how to make and apply code modifications yourself, alongside developer test scripts.
 
 ---
 

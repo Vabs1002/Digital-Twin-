@@ -1,0 +1,19 @@
+Title: Supervised Learning and Linear Regression
+Speaker/Author: Andrew Ng
+
+In supervised learning, we are given a dataset and already know what our correct output should look like, having the idea that there is a relationship between the input and the output. Supervised learning problems are categorized into "regression" and "classification" problems. In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. In a classification problem, we are instead trying to predict results in a discrete output, mapping input variables into discrete categories.
+
+Let's start with Linear Regression. In linear regression, we want to predict a continuous-valued output. For example, predicting housing prices. The input features are denoted as x (e.g., size of the house in square feet), and the target output we want to predict is y (e.g., price of the house in thousands of dollars). 
+
+We define a hypothesis function, which is a mapping from x to y:
+h_theta(x) = theta_0 + theta_1 * x
+
+Here, theta_0 and theta_1 are parameters. Our goal is to choose these parameters so that the predictions are as close to the actual values as possible. To measure how close they are, we define a Cost Function, also known as the squared error function or mean squared error:
+J(theta_0, theta_1) = (1 / 2m) * sum_{i=1}^m (h_theta(x^(i)) - y^(i))^2
+
+Where m is the number of training examples in our training set. We want to find the values of theta_0 and theta_1 that minimize the cost function J.
+
+To minimize the cost function, we use Gradient Descent. Gradient descent is an optimization algorithm that starts with some initial values for the parameters, and then repeatedly updates them in the direction of the steepest decrease of the cost function:
+theta_j := theta_j - alpha * (partial / partial theta_j) J(theta_0, theta_1)
+
+Here, alpha is the learning rate, which controls how big a step we take during each iteration. If alpha is too small, gradient descent can be slow. If alpha is too large, it can overshoot the minimum and fail to converge. Don't worry about it if you didn't get all the mathematics yet, the intuition is that we are simply walking downhill on a bowl-shaped cost surface until we reach the bottom.
