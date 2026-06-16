@@ -8,54 +8,28 @@ import {
   HelpCircle, Eye, RefreshCw, X, HardDrive
 } from 'lucide-react';
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-interface RAGSource {
-  text: string;
-  source: string;
-  title: string;
-}
-
-interface MemoryData {
-  userName: string;
-  userAge: string;
-  userBackground: string;
-  topicsDiscussed: string[];
-  userGoals: string;
-  lastInteracted: string;
-}
-
-interface DocumentItem {
-  name: string;
-  title: string;
-}
-
 const BACKEND_URL = 'http://localhost:5000';
 
 function App() {
-  const chatAbortControllerRef = useRef<AbortController | null>(null);
+  const chatAbortControllerRef = useRef(null);
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [sources, setSources] = useState<RAGSource[]>([]);
-  const [memory, setMemory] = useState<MemoryData | null>(null);
+  const [messages, setMessages] = useState([]);
+  const [sources, setSources] = useState([]);
+  const [memory, setMemory] = useState(null);
   const [isThinking, setIsThinking] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   
   // Workspace files list
-  const [documents, setDocuments] = useState<DocumentItem[]>([]);
-  const [selectedDocContent, setSelectedDocContent] = useState<string | null>(null);
-  const [selectedDocTitle, setSelectedDocTitle] = useState<string>('');
+  const [documents, setDocuments] = useState([]);
+  const [selectedDocContent, setSelectedDocContent] = useState(null);
+  const [selectedDocTitle, setSelectedDocTitle] = useState('');
 
   // Voice selection state
-  const [selectedVoice, setSelectedVoice] = useState<string>(() => {
+  const [selectedVoice, setSelectedVoice] = useState(() => {
     return localStorage.getItem('andrew_selected_voice') || 'en-US-AndrewNeural';
   });
 
-  const handleVoiceChange = (voiceId: string) => {
+  const handleVoiceChange = (voiceId) => {
     setSelectedVoice(voiceId);
     localStorage.setItem('andrew_selected_voice', voiceId);
   };
@@ -106,7 +80,7 @@ function App() {
   }, []);
 
   // Open a course document modal
-  const handleOpenDoc = async (docName: string, docTitle: string) => {
+  const handleOpenDoc = async (docName, docTitle) => {
     try {
       setSelectedDocTitle(docTitle);
       const response = await fetch(`${BACKEND_URL}/api/documents/${docName}?t=${Date.now()}`);
@@ -139,14 +113,14 @@ function App() {
   };
 
   // Streaming Send Message pipeline
-  const handleSendMessage = async (text: string) => {
+  const handleSendMessage = async (text) => {
     // 1. Abort previous request in flight
     if (chatAbortControllerRef.current) {
       chatAbortControllerRef.current.abort();
       chatAbortControllerRef.current = null;
     }
 
-    const userMsg: Message = {
+    const userMsg = {
       id: Date.now().toString(),
       role: 'user',
       content: text
@@ -187,7 +161,7 @@ function App() {
       }
 
       const assistantMsgId = (Date.now() + 1).toString();
-      const initialAssistantMsg: Message = {
+      const initialAssistantMsg = {
         id: assistantMsgId,
         role: 'assistant',
         content: ''
@@ -258,13 +232,13 @@ function App() {
       // Sync memory dashboard
       setTimeout(fetchMemory, 300);
 
-    } catch (error: any) {
+    } catch (error) {
       if (error.name === 'AbortError') {
         console.log('Previous chat request aborted by user interruption.');
         return; // Exit silently
       }
       console.error('Error during chat request:', error);
-      const errorMsg: Message = {
+      const errorMsg = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: "I encountered a quota rate limit. Let's wait a few seconds and try again."
@@ -368,7 +342,7 @@ function App() {
                   >
                     <FileText size={14} style={{ color: 'var(--figma-purple)' }} />
                     <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                      {doc.title}
+                       {doc.title}
                     </span>
                   </div>
                 ))

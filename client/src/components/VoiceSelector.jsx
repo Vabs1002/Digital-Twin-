@@ -1,23 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Play, Pause, Volume2, Check } from 'lucide-react';
 
-interface VoiceOption {
-  id: string;
-  name: string;
-  description: string;
-  sampleUrl: string;
-}
+export const VoiceSelector = ({ selectedVoice, onVoiceChange }) => {
+  const [playingVoiceId, setPlayingVoiceId] = useState(null);
+  const audioRef = useRef(null);
 
-interface VoiceSelectorProps {
-  selectedVoice: string;
-  onVoiceChange: (voiceId: string) => void;
-}
-
-export const VoiceSelector: React.FC<VoiceSelectorProps> = ({ selectedVoice, onVoiceChange }) => {
-  const [playingVoiceId, setPlayingVoiceId] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const voices: VoiceOption[] = [
+  const voices = [
     {
       id: 'en-US-AndrewNeural',
       name: 'Standard US Accent',
@@ -44,7 +32,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({ selectedVoice, onV
     },
   ];
 
-  const handlePlayPreview = (voiceId: string, url: string, e: React.MouseEvent) => {
+  const handlePlayPreview = (voiceId, url, e) => {
     e.stopPropagation(); // Avoid triggering selection
 
     if (playingVoiceId === voiceId) {
@@ -65,7 +53,7 @@ export const VoiceSelector: React.FC<VoiceSelectorProps> = ({ selectedVoice, onV
     setPlayingVoiceId(voiceId);
 
     audio.play().catch(err => {
-      console.error("Failed to play voice preview:", err);
+      print("Failed to play voice preview:", err);
       setPlayingVoiceId(null);
     });
 

@@ -1,31 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Mic, Volume2, VolumeX, Sparkles } from 'lucide-react';
 
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-interface ChatWindowProps {
-  messages: Message[];
-  onSendMessage: (text: string) => void;
-  isThinking: boolean;
-  selectedVoice: string;
-  isStreaming: boolean;
-  onStopActiveResponse: () => void;
-}
-
-export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage, isThinking, selectedVoice, isStreaming, onStopActiveResponse }) => {
+export const ChatWindow = ({ messages, onSendMessage, isThinking, selectedVoice, isStreaming, onStopActiveResponse }) => {
   const [inputText, setInputText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const messagesEndRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const audioRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // Keep latest onSendMessage reference inside a ref to prevent stale closures in STT hook
   const onSendMessageRef = useRef(onSendMessage);
@@ -48,7 +33,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
 
   // Set up Speech-to-Text (Speech Recognition)
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognition.continuous = false;
@@ -60,7 +45,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
         setIsListening(true);
       };
 
-      recognition.onresult = (event: any) => {
+      recognition.onresult = (event) => {
         const speechToText = event.results[0][0].transcript;
         if (speechToText && speechToText.trim() !== '') {
           // Force stop the microphone immediately before submitting to avoid listening to the response
@@ -72,7 +57,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
         }
       };
 
-      recognition.onerror = (event: any) => {
+      recognition.onerror = (event) => {
         console.error('Speech recognition error', event.error);
         setIsListening(false);
       };
@@ -85,7 +70,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
     }
   }, []);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
     onSendMessage(inputText.trim());
@@ -98,7 +83,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Listen for Enter key to submit, Shift+Enter to newline
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend(e);
@@ -124,13 +109,13 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
     }
   };
 
-  const sentencesSentCountRef = useRef<number>(0);
-  const audioSessionIdRef = useRef<number>(0);
-  const audioQueue = useRef<string[]>([]);
-  const isPlayingQueue = useRef<boolean>(false);
+  const sentencesSentCountRef = useRef(0);
+  const audioSessionIdRef = useRef(0);
+  const audioQueue = useRef([]);
+  const isPlayingQueue = useRef(false);
 
   // Cleans formatting, markdown, and LaTeX syntax before sending to speech synthesis
-  const cleanTextForTTS = (text: string): string => {
+  const cleanTextForTTS = (text) => {
     return text
       // Remove leading bullet symbols like "-", "*", "+", "•" followed by space
       .replace(/^\s*[-+*•]\s+/, '')
@@ -146,8 +131,8 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Robustly tokenizes dialogue into completed sentences
-  const splitIntoSentences = (text: string): string[] => {
-    const sentences: string[] = [];
+  const splitIntoSentences = (text) => {
+    const sentences = [];
     let currentSentence = '';
     
     // Split by whitespace but keep the whitespace tokens to avoid joining words
@@ -204,7 +189,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
 
     isPlayingQueue.current = true;
     setIsPlayingAudio(true);
-    const nextAudioUrl = audioQueue.current.shift()!;
+    const nextAudioUrl = audioQueue.current.shift();
     
     const audio = new Audio(nextAudioUrl);
     audioRef.current = audio;
@@ -225,7 +210,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Queue an audio URL and trigger player if idle
-  const queueAudio = (url: string) => {
+  const queueAudio = (url) => {
     audioQueue.current.push(url);
     if (!isPlayingQueue.current) {
       playNextInQueue();
@@ -248,7 +233,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Generate audio for a single sentence and append it to queue
-  const generateAndQueueSentence = async (text: string) => {
+  const generateAndQueueSentence = async (text) => {
     const cleanedText = cleanTextForTTS(text);
     if (isMuted || !cleanedText) return;
     const sessionId = audioSessionIdRef.current;
@@ -275,7 +260,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Split and queue an entire message (used for manual play click)
-  const speakFullMessage = (text: string) => {
+  const speakFullMessage = (text) => {
     resetAudioQueue();
     const sentences = splitIntoSentences(text);
     
@@ -289,7 +274,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Extract and process any completed sentences during active streaming
-  const processNewSentences = (text: string) => {
+  const processNewSentences = (text) => {
     if (isMuted || !text) return;
 
     // Do not speak temporary/system retry status messages
@@ -308,7 +293,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
   };
 
   // Extract completed sentences and clear any leftover text when streaming ends
-  const handleStreamEnd = (text: string) => {
+  const handleStreamEnd = (text) => {
     if (!text) return;
     
     // Do not speak temporary/system retry status messages
@@ -362,7 +347,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
     }
   }, [isMuted]);
 
-  const formatText = (text: string) => {
+  const formatText = (text) => {
     const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/);
     return parts.map((part, index) => {
       if (part.startsWith('**') && part.endsWith('**')) {
@@ -377,21 +362,52 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
 
   return (
     <div className="figma-canvas">
+      {/* Visual Header bar with photo and name */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        padding: '12px 16px',
+        borderBottom: '1px solid var(--border-color)',
+        background: 'rgba(255, 255, 255, 0.02)',
+        backdropFilter: 'blur(8px)',
+        borderTopLeftRadius: 'var(--radius-lg)',
+        borderTopRightRadius: 'var(--radius-lg)',
+        flexShrink: 0
+      }}>
+        <div style={{ width: '32px', height: '32px', borderRadius: '50%', overflow: 'hidden', border: '1.5px solid var(--figma-purple)' }}>
+          <img src="/andrew-ng.jpg" alt="Andrew Ng Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span style={{ fontSize: '0.8rem', fontWeight: 650, color: 'white', letterSpacing: '0.2px' }}>Andrew Ng</span>
+          <span style={{ fontSize: '0.62rem', color: 'var(--figma-purple)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span className="status-dot pulsing" style={{ backgroundColor: 'var(--figma-purple)', width: '6px', height: '6px' }}></span>
+            Online • Virtual Twin
+          </span>
+        </div>
+      </div>
+
       {/* Scrollable Chat Area */}
       <div className="canvas-chat-container">
         {messages.length === 0 ? (
           <div className="empty-state">
-            <Sparkles size={32} style={{ color: 'var(--figma-purple)', marginBottom: '8px' }} />
-            <h3>Andrew Ng Digital Twin Canvas</h3>
-            <p style={{ maxWidth: '380px' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', overflow: 'hidden', marginBottom: '12px', border: '2px solid var(--figma-purple)' }}>
+              <img src="/andrew-ng.jpg" alt="Andrew Ng Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <h3>Andrew Ng Digital Twin</h3>
+            <p style={{ maxWidth: '380px', fontSize: '0.74rem', color: 'var(--text-muted)' }}>
               Welcome Vaibhav! Type a query or click syllabus files on the left to start studying AI.
             </p>
           </div>
         ) : (
           messages.map((msg) => (
             <div key={msg.id} className={`figma-bubble-wrapper ${msg.role}`}>
-              <div className="figma-avatar">
-                {msg.role === 'user' ? 'U' : 'AN'}
+              <div className="figma-avatar" style={{ overflow: 'hidden' }}>
+                {msg.role === 'user' ? (
+                  'U'
+                ) : (
+                  <img src="/andrew-ng.jpg" alt="Andrew Ng Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                )}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
                 <div className="figma-bubble">
@@ -418,7 +434,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onSendMessage,
 
         {isThinking && (
           <div className="figma-bubble-wrapper assistant">
-            <div className="figma-avatar">AN</div>
+            <div className="figma-avatar" style={{ overflow: 'hidden' }}>
+              <img src="/andrew-ng.jpg" alt="Andrew Ng Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
             <div className="figma-bubble">
               <div className="typing-indicator" style={{ padding: '4px' }}>
                 <div className="typing-dot"></div>

@@ -1,17 +1,6 @@
 import React from 'react';
 
-interface RAGSource {
-  text: string;
-  source: string;
-  title: string;
-  score?: number;
-}
-
-interface RAGViewerProps {
-  sources: RAGSource[];
-}
-
-export const RAGViewer: React.FC<RAGViewerProps> = ({ sources }) => {
+export const RAGViewer = ({ sources }) => {
   return (
     <div className="inspector-card">
       <div className="inspector-label">RAG Grounding Logs</div>
@@ -23,7 +12,18 @@ export const RAGViewer: React.FC<RAGViewerProps> = ({ sources }) => {
           </div>
         ) : (
           sources.map((src, i) => {
-            const scorePct = src.score !== undefined ? `${Math.round((1 - src.score) * 100)}%` : '';
+            // Check if score is float (ChromaDB distance score where 0.0 is perfect)
+            // or if it's rapidfuzz score (0-100 where 100 is perfect)
+            let scorePct = '';
+            if (src.score !== undefined) {
+              if (src.score <= 1.0) {
+                // Cosine distance (1 - distance is similarity)
+                scorePct = `${Math.round((1 - src.score) * 100)}%`;
+              } else {
+                // Fuzzy score (0-100)
+                scorePct = `${Math.round(src.score)}%`;
+              }
+            }
             return (
               <div key={i} className="inspector-source-card">
                 <div className="inspector-source-title">

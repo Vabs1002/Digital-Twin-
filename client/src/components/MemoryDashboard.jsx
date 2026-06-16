@@ -1,20 +1,6 @@
 import React from 'react';
 
-interface MemoryData {
-  userName: string;
-  userAge: string;
-  userBackground: string;
-  topicsDiscussed: string[];
-  userGoals: string;
-  lastInteracted: string;
-}
-
-interface MemoryDashboardProps {
-  memory: MemoryData | null;
-  onResetMemory: () => void;
-}
-
-export const MemoryDashboard: React.FC<MemoryDashboardProps> = ({ memory, onResetMemory }) => {
+export const MemoryDashboard = ({ memory, onResetMemory }) => {
   if (!memory) {
     return (
       <div className="inspector-card">
@@ -24,7 +10,7 @@ export const MemoryDashboard: React.FC<MemoryDashboardProps> = ({ memory, onRese
     );
   }
 
-  const formatDate = (isoStr: string) => {
+  const formatDate = (isoStr) => {
     try {
       const date = new Date(isoStr);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
